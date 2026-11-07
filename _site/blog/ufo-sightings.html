@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<!--
+  portfolYOU Jekyll theme by Youssef Raafat
+  Free for personal and commercial use under the MIT license
+  https://github.com/YoussefRaafatNasry/portfolYOU
+  Updates for JPN Fall 2024
+  FALL2024ID9492
+-->
+
+<html lang="en" class="h-100">
+
+<head>
+
+  
+  
+  
+
+  
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="UFO Sightings Visualizations">
+  <meta property="og:description" content="Two interactive Altair visualizations of NUFORC UFO sighting reports">
+  <meta property="og:image" content="https://media.tenor.com/8RcIoWTKYR4AAAAe/scuze-corgi.png">
+
+  <title>UFO Sightings Visualizations</title>
+  <meta name="description" content="Two interactive Altair visualizations of NUFORC UFO sighting reports">
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico">
+
+  <!-- Theme style -->
+  <script src="/assets/js/theme.js"></script>
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.0/css/all.css">
+
+  <!-- Bootstrap CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+
+  <!-- Animate CSS CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+</head>
+
+<body class="h-100 d-flex flex-column">
+
+  <main class="flex-shrink-0 container mt-5">
+    <nav class="navbar navbar-expand-lg navbar-themed">
+
+  <a class="navbar-brand" href="/"><h5><b>IS445 Jekyll Template</b></h5></a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <i class="fas fa-1x fa-bars text-themed"></i>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav ml-auto"><a class="nav-item nav-link " href="/projects/">Projects</a>
+
+      <a class="nav-item nav-link " href="/about/">About</a>
+
+      
+
+      <span id="theme-toggler" class="nav-item nav-link" role="button" onclick="toggleTheme()"></span>
+    </div>
+  </div>
+
+</nav>
+    <div class="col-lg-10 mx-auto mt-5 markdown-body">
+  <h1><b>UFO Sightings Visualizations</b></h1>
+
+<p class="post-metadata text-muted">
+  06 November 2026 -  
+  <b>3 mins read time</b>
+
+  <br></p>
+
+<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+<p><a href="https://github.com/UIUC-iSchool-DataViz/is445_data/blob/main/ufo-scrubbed-geocoded-time-standardized-00.csv" class="btn">The Data</a>
+<a href="https://github.com/Jack12138666/Jack12138666.github.io/blob/main/python_notebooks/ufo_viz.ipynb" class="btn">The Analysis</a></p>
+
+<h2 id="plot-1-ufo-sightings-over-time-and-by-reported-shape">Plot 1: UFO sightings over time and by reported shape</h2>
+
+<div id="vis1"></div>
+<script>
+  vegaEmbed('#vis1', '/assets/json/ufo_trend_by_shape.json');
+</script>
+
+<p>This plot shows how many UFO sightings were reported to NUFORC each year, and which shapes people reported most often. The top chart is an area chart with year encoded as a quantitative (<code class="language-plaintext highlighter-rouge">Q</code>) variable on the x-axis (I used quantitative rather than temporal because the data was already aggregated to whole years) and the number of sightings (a quantitative aggregate, <code class="language-plaintext highlighter-rouge">sum(sightings)</code>) on the y-axis; an area mark makes the overall volume of reports over time easy to read. The bottom chart is a horizontal bar chart with the reported shape as a nominal (<code class="language-plaintext highlighter-rouge">N</code>) variable on the y-axis, sorted by count, and the number of sightings as a quantitative variable on the x-axis. I used a single blue color for both charts instead of a color scheme, because shape is already shown by position on the y-axis, so coloring by shape would repeat the same information. In the notebook, I parsed the date strings into Pandas timestamps (dropping a small number of rows with unparseable times such as “24:00”), kept reports from 1950 onward because earlier years have very few reports, grouped all but the 8 most common named shapes into an “other” category, and counted sightings per year and shape so the chart only embeds a small aggregated table.</p>
+
+<h2 id="plot-2-ufo-sightings-by-us-state">Plot 2: UFO sightings by US state</h2>
+
+<div id="vis2"></div>
+<script>
+  vegaEmbed('#vis2', '/assets/json/ufo_map_by_state.json');
+</script>
+
+<p>This map shows the total number of UFO sightings reported in each US state. Each state is drawn with a geoshape mark (Albers USA projection), where the state boundaries are encoded with the geojson (<code class="language-plaintext highlighter-rouge">G</code>) encoding type, and the number of sightings is encoded as a quantitative (<code class="language-plaintext highlighter-rouge">Q</code>) variable mapped to color. The state name in the tooltip is a nominal (<code class="language-plaintext highlighter-rouge">N</code>) variable. I used the sequential “viridis” color scheme because the variable is an ordered count, viridis is perceptually uniform, and it remains readable for people with color vision deficiencies. I applied a square-root scale to the color, since a few very populous states have far more reports than the rest, and a linear scale would make most states look the same. States with no matching reports are shown in light gray. In the notebook, I kept only reports from the US, counted sightings per state and shape group, and added each state’s FIPS code so the counts could be joined to the US states TopoJSON map. Note that these are raw counts, not adjusted for population, so states with more people naturally tend to have more reports.</p>
+
+<h2 id="interactivity">Interactivity</h2>
+
+<p>Both plots are interactive. In Plot 1, you can drag across the timeline to select a range of years, and the shape bar chart below updates to show only sightings from those years. This makes it possible to see whether the most commonly reported shapes changed over time, which is hard to see in a single static chart. In Plot 2, a dropdown menu lets you filter the map to one reported shape (or all shapes), and hovering over a state shows its name and exact count. This helps compare where different kinds of sightings are concentrated without crowding many maps onto the page.</p>
+
+
+
+</div>
+  </main>
+  <footer class="mt-auto py-3 text-center">
+
+  <small class="text-muted mb-2">
+    <i class="fas fa-code"></i> with <i class="fas fa-heart"></i>
+    by <strong>A. P. Corgi</strong>
+  </small>
+
+  <div class="container-fluid justify-content-center"><a class="social mx-1"  href="mailto:username@domain.com"
+       style="color: #6c757d"
+       onMouseOver="this.style.color='#db4437'"
+       onMouseOut="this.style.color='#6c757d'">
+      <i class="fas fa-envelope fa-1x"></i>
+    </a><a class="social mx-1"  href="https://www.github.com/jnaiman"
+       style="color: #6c757d"
+       onMouseOver="this.style.color='#333333'"
+       onMouseOut="this.style.color='#6c757d'">
+      <i class="fab fa-github fa-1x"></i>
+    </a><a class="social mx-1"  href="https://www.twitter.com/your_username"
+       style="color: #6c757d"
+       onMouseOver="this.style.color='#1da1f2'"
+       onMouseOut="this.style.color='#6c757d'">
+      <i class="fab fa-twitter fa-1x"></i>
+    </a><a class="social mx-1"  href="https://www.youtube.com/your_channel_name"
+       style="color: #6c757d"
+       onMouseOver="this.style.color='#ff0000'"
+       onMouseOut="this.style.color='#6c757d'">
+      <i class="fab fa-youtube fa-1x"></i>
+    </a>
+
+</div>
+
+  Theme by <a href="https://github.com/YoussefRaafatNasry/portfolYOU">portfolYOU</a> and <a href="https://github.com/4dcu-be/4dcu.be">4dcu.be</a>.
+
+  
+<!--<small id="attribution">
+    theme <a href="https://github.com/YoussefRaafatNasry/portfolYOU">portfolYOU</a>
+  </small>
+-->
+
+</footer>
+
+
+
+
+  
+  <!-- GitHub Buttons -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- jQuery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Popper.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+
+<!-- Bootstrap JS CDN -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- wow.js CDN & Activation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.js"></script>
+<script> new WOW().init(); </script>
+
+<!-- Initialize all tooltips -->
+<script>
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+</body>
+
+<!--
+end of checks! JPN
+-->
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

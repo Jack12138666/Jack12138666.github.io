@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "UFO Sightings Visualizations",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "/blog/ufo-sightings",
+      "date"     : "2026-11-06 00:00:00 -0600"
+    } ,
+  
+    {
       "title"    : "The Hello World of Blogs",
       "category" : "",
       "tags"     : "Technology, Blogging",
